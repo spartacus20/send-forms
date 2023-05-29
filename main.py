@@ -6,11 +6,14 @@ import time
 
 url = 'https://accounts.google.com/ServiceLogin'
 driver = uc.Chrome(use_chrome=True)
-wait = WebDriverWait(driver, 20)
+wait = WebDriverWait(driver, 10)
 driver.get(url)
  
-def login_google(email):
+def login_google(email, password):
     wait.until(EC.visibility_of_element_located((By.NAME, 'identifier'))).send_keys(email + '\n')
+    time.sleep(10)
+    #class="whsOnd zHQkBf"
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'input.whsOnd.zHQkBf'))).send_keys(password)
     time.sleep(15)
     
 def pagina1(): 
@@ -21,7 +24,7 @@ def pagina1():
             print("O campo de email já está preenchido:", valor_email)
         else:
             campo_email.send_keys('efoxmundial@gmail.com')
-        time.sleep(5)
+        time.sleep(1)
         botao_seguinte = driver.find_element(By.CLASS_NAME, 'NPEfkd')
         botao_seguinte.click()
     except Exception as e:
@@ -29,15 +32,24 @@ def pagina1():
 
     
 email = 'nomasclips@gmail.com' # replace email
-login_google(email) # login
+password = 'jorgetomas12'
+login_google(email, password) # login
 inquery = "https://docs.google.com/forms/d/e/1FAIpQLSf0t2Mducl6BfPnpOznfHUAhlejLFhrEbtDXp5Pm18PDzdWRQ/viewform"
 driver.get(inquery)
 time.sleep(10)
 
 #Page 1
 pagina1()
-wait.until()
-    
+
+#Array of inputs  page 2     
+inputs = driver.find_elements(By.CSS_SELECTOR, 'input[type="hidden"][name^="entry."]')
+for index, input_element in enumerate(inputs):
+    nome_campo = input_element.get_attribute('name')
+    valor_atual = input_element.get_attribute('value')
+    print("Indice:", index)
+    print("Nome do campo<:", nome_campo)
+    print("-------------------------")
+
 time.sleep(130)
 
 
